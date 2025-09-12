@@ -13,6 +13,17 @@ export default function Contact() {
   const [sending, setSending] = useState(false);
   const MAX = 1000;
 
+  const safeParse = async (res) => {
+    const ct = res.headers.get("content-type") || "";
+    const text = await res.text();
+    if (!ct.includes("application/json") || !text) return {};
+    try {
+      return JSON.parse(text);
+    } catch {
+      return {};
+    }
+  };
+
   const onSubmit = async (e) => {
     e.preventDefault();
     if (sending) return;
@@ -22,18 +33,11 @@ export default function Contact() {
     const message = messageRef.current.value.trim();
     const hp = hpRef.current.value.trim();
 
-    if (!email || !message) {
-      toast.error("Email and message are required");
-      return;
-    }
-    if (!/^\S+@\S+\.\S+$/.test(email)) {
-      toast.error("Please enter a valid email");
-      return;
-    }
-    if (message.length > MAX) {
-      toast.error("Please shorten your message");
-      return;
-    }
+    if (!email || !message)
+      return toast.error("Email and message are required");
+    if (!/^\S+@\S+\.\S+$/.test(email))
+      return toast.error("Please enter a valid email");
+    if (message.length > MAX) return toast.error("Please shorten your message");
 
     setSending(true);
     try {
@@ -42,8 +46,16 @@ export default function Contact() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, message, hp }),
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Failed to send");
+
+      const data = await safeParse(res);
+      if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
+      if (data.skipped === "honeypot") {
+        throw new Error(
+          "Message skipped (honeypot). Turn off autofill or try again."
+        );
+      }
+      if (!data.id)
+        throw new Error("Email not sent (no id). Check server logs.");
 
       toast.success("Message sent! I’ll reply soon.");
       nameRef.current.value = "";
@@ -51,16 +63,14 @@ export default function Contact() {
       messageRef.current.value = "";
       setCount(0);
     } catch (err) {
-      toast.error(err.message || "Something went wrong");
+      toast.error(err.message || "Failed to send");
     } finally {
       setSending(false);
     }
   };
 
   const onKeyDown = (e) => {
-    if ((e.metaKey || e.ctrlKey) && e.key === "Enter") {
-      onSubmit(e);
-    }
+    if ((e.metaKey || e.ctrlKey) && e.key === "Enter") onSubmit(e);
   };
 
   return (
@@ -83,8 +93,20 @@ export default function Contact() {
 
         <form
           onSubmit={onSubmit}
+          autoComplete="off"
           className="max-w-xl mx-auto text-left bg-white/70 dark:bg-gray-800/60 border border-gray-200 dark:border-gray-700 rounded-xl p-5 shadow-sm backdrop-blur"
         >
+          {/* Honeypot: hidden input right after the form opens */}
+          <input
+            ref={hpRef}
+            type="text"
+            name="notes_field"
+            autoComplete="off"
+            tabIndex="-1"
+            aria-hidden="true"
+            style={{ display: "none" }}
+          />
+
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -138,17 +160,6 @@ export default function Contact() {
               </span>
             </div>
           </div>
-
-          {/* Honeypot field (hidden) */}
-          <input
-            ref={hpRef}
-            type="text"
-            name="company"
-            tabIndex="-1"
-            autoComplete="off"
-            className="absolute -left-[9999px] -top-[9999px]"
-            aria-hidden="true"
-          />
 
           <div className="mt-6 flex items-center justify-end gap-3">
             <button

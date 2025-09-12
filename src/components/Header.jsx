@@ -1,10 +1,15 @@
+// src/components/Header.jsx
 import { useState } from "react";
 import config from "../config";
 import { SunIcon, MoonIcon } from "../icons";
-import { motion } from "framer-motion";
 
 export default function Header({ theme, toggleTheme }) {
   const [isOpen, setIsOpen] = useState(false);
+
+  // Serve the PDF from /public/cv/...
+  // Put your file at: public/cv/Shwetank_Jain_CV.pdf
+  const cvUrl = `${import.meta.env.BASE_URL}cv/Shwetank_Jain_CV.pdf`;
+
   const navLinks = [
     { href: "#about", label: "About" },
     { href: "#projects", label: "Projects" },
@@ -19,6 +24,7 @@ export default function Header({ theme, toggleTheme }) {
           {config.name}
         </a>
 
+        {/* Desktop nav */}
         <nav className="hidden md:flex items-center space-x-8">
           {navLinks.map((link) => (
             <a
@@ -29,26 +35,29 @@ export default function Header({ theme, toggleTheme }) {
               {link.label}
             </a>
           ))}
-          <motion.button
+
+          {/* CV download link */}
+          <a
+            href={cvUrl}
+            download
+            className="text-gray-400 hover:text-white font-medium transition-colors duration-300"
+          >
+            CV
+          </a>
+
+          <button
             onClick={toggleTheme}
             className="text-gray-400 hover:text-white"
-            whileTap={{ scale: 0.9 }}
           >
-            <motion.span
-              key={theme} // forces crossfade/rotate when theme changes
-              initial={{ rotate: -90, opacity: 0 }}
-              animate={{ rotate: 0, opacity: 1 }}
-              transition={{ duration: 0.25 }}
-            >
-              {theme === "dark" ? (
-                <SunIcon className="w-6 h-6" />
-              ) : (
-                <MoonIcon className="w-6 h-6" />
-              )}
-            </motion.span>
-          </motion.button>
+            {theme === "dark" ? (
+              <SunIcon className="w-6 h-6" />
+            ) : (
+              <MoonIcon className="w-6 h-6" />
+            )}
+          </button>
         </nav>
 
+        {/* Mobile hamburger */}
         <button
           onClick={() => setIsOpen(!isOpen)}
           className="md:hidden z-50 text-gray-100"
@@ -80,6 +89,7 @@ export default function Header({ theme, toggleTheme }) {
         </button>
       </div>
 
+      {/* Mobile dropdown */}
       <div
         className={`absolute top-full left-0 right-0 bg-black border-b border-gray-800 md:hidden transition-all duration-300 ease-in-out ${
           isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
@@ -96,6 +106,17 @@ export default function Header({ theme, toggleTheme }) {
               {link.label}
             </a>
           ))}
+
+          {/* CV download in mobile menu */}
+          <a
+            href={cvUrl}
+            download
+            onClick={() => setIsOpen(false)}
+            className="block w-full text-center py-3 text-gray-300 hover:text-white hover:bg-gray-900 rounded-md transition-colors duration-300"
+          >
+            Download CV
+          </a>
+
           <button onClick={toggleTheme} className="mt-2 py-3 text-gray-300">
             {theme === "dark" ? (
               <SunIcon className="w-6 h-6 mx-auto" />
