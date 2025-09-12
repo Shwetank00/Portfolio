@@ -16,30 +16,13 @@ export default function Hero() {
     </a>
   );
 
-  // ✅ Define your CV path (file is at public/Shwetank_Jain_CV.pdf)
-  // If your app is at the domain root, this is perfect:
+  // CV file lives at public/Shwetank_Jain_CV.pdf
   const cvUrl = "/Shwetank_Jain_CV.pdf";
-  // If you ever deploy under a subpath, use:
-  // const cvUrl = `${import.meta.env.BASE_URL}Shwetank_Jain_CV.pdf`;
 
-  // Helper to build a safe mailto link
-  const createMailto = ({ to, subject, body } = {}) => {
-    const params = new URLSearchParams();
-    if (subject) params.set("subject", subject);
-    if (body) params.set("body", body);
-    const q = params.toString();
-    return `mailto:${to}${q ? `?${q}` : ""}`;
-  };
-
-  // Email link + click handler (forces composer to open)
-  const mailHref = createMailto({
-    to: config.email,
-    subject: "Hello Shwetank",
-  });
-  const openMail = (e) => {
-    e.preventDefault();
-    window.location.href = mailHref;
-  };
+  // Plain mailto link (no onClick). Encode the subject.
+  const mailHref = `mailto:${config.email}?subject=${encodeURIComponent(
+    "Hello Shwetank"
+  )}`;
 
   return (
     <section className="relative overflow-hidden pt-32 pb-24 text-center">
@@ -85,12 +68,11 @@ export default function Hero() {
               >
                 <LinkedinIcon className="w-8 h-8" />
               </a>
-              {/* Email icon opens composer */}
+              {/* Email icon — plain mailto */}
               <a
                 href={mailHref}
-                onClick={openMail}
                 aria-label="Email"
-                className="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors duration-300"
+                className="relative z-10 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors duration-300"
                 title={config.email}
               >
                 <svg

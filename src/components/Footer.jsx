@@ -1,26 +1,11 @@
+// src/components/Footer.jsx
 import config from "../config";
 import { GithubIcon, LinkedinIcon } from "../icons";
 
-// Helper to build a safe mailto link
-const createMailto = ({ to, subject, body } = {}) => {
-  const params = new URLSearchParams();
-  if (subject) params.set("subject", subject);
-  if (body) params.set("body", body);
-  const query = params.toString();
-  return `mailto:${to}${query ? `?${query}` : ""}`;
-};
-
 export default function Footer() {
-  const mailHref = createMailto({
-    to: config.email,
-    subject: "Hello Shwetank",
-  });
-
-  const openMail = (e) => {
-    // Some environments ignore anchor default for mailto; force it.
-    e.preventDefault();
-    window.location.href = mailHref;
-  };
+  const mailHref = `mailto:${config.email}?subject=${encodeURIComponent(
+    "Hello Shwetank"
+  )}`;
 
   return (
     <footer className="bg-black text-white py-8">
@@ -35,7 +20,6 @@ export default function Footer() {
           >
             <GithubIcon className="w-6 h-6" />
           </a>
-
           <a
             href={config.socials.linkedin}
             target="_blank"
@@ -45,13 +29,11 @@ export default function Footer() {
           >
             <LinkedinIcon className="w-6 h-6" />
           </a>
-
-          {/* Email icon — triggers the mail composer */}
+          {/* Email icon — plain mailto */}
           <a
             href={mailHref}
-            onClick={openMail}
             aria-label="Email"
-            className="hover:text-white transition-colors duration-300"
+            className="relative z-10 hover:text-white transition-colors duration-300"
             title={config.email}
           >
             <svg
@@ -70,13 +52,6 @@ export default function Footer() {
             </svg>
           </a>
         </div>
-
-        {/* Optional: click-to-copy / mail link text. Remove if you want ultra-minimal. */}
-        {/* <div className="text-sm">
-          <a href={mailHref} onClick={openMail} className="underline hover:text-gray-200">
-            {config.email}
-          </a>
-        </div> */}
 
         <p className="mt-2">
           &copy; {new Date().getFullYear()} {config.name}. All Rights Reserved.
