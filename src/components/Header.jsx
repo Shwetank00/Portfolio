@@ -8,7 +8,7 @@ export default function Header({ theme, toggleTheme }) {
 
   // Serve the PDF from /public/cv/...
   // Put your file at: public/cv/Shwetank_Jain_CV.pdf
-  const cvUrl = `${import.meta.env.BASE_URL}Shwetank_Jain_CV.pdf`;
+  const cvUrl = "Shwetank_Jain_CV.pdf";
 
   const navLinks = [
     { href: "#about", label: "About" },
