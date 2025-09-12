@@ -3,14 +3,23 @@ const config = {
   email: "shwetankjain00@gmail.com",
   socials: {
     github: "https://github.com/Shwetank00",
-    linkedin: "https://www.linkedin.com/in/shwetankjain/",
+    linkedin: "https://www.linkedin.com/in/shwetank00/",
+    codolio: "https://www.codolio.com/profile/shwetank00",
   },
   projects: [
     {
       title: "Welth: AI Finance Platform",
       description:
         "An AI-powered platform to manage finances, featuring budget/transaction dashboards, OCR for receipts using the Gemini API, and automated reporting.",
-      tags: ["Next.js", "Prisma", "Supabase", "Gemini API", "Inngest", "Clerk", "Resend"],
+      tags: [
+        "Next.js",
+        "Prisma",
+        "Supabase",
+        "Gemini API",
+        "Inngest",
+        "Clerk",
+        "Resend",
+      ],
       link: "https://github.com/Shwetank00/welth",
       liveLink: "https://welth-shwetank.vercel.app/",
       bgImage:
@@ -37,6 +46,6 @@ const config = {
     "Prisma",
     "Git & GitHub",
   ],
-}
+};
 
-export default config
+export default config;
