@@ -1,5 +1,6 @@
 import AnimatedSection from "../components/AnimatedSection";
 import img from "../assets/img.jpg";
+import { motion } from "framer-motion";
 
 export default function About() {
   return (
@@ -9,13 +10,19 @@ export default function About() {
           About Me
         </h2>
         <div className="flex flex-col md:flex-row items-center justify-center gap-10 md:gap-16 max-w-4xl mx-auto">
-          <div className="w-48 h-48 md:w-64 md:h-64 lg:w-80 lg:h-80 flex-shrink-0">
+          <motion.div
+            className="w-48 h-48 md:w-64 md:h-64 lg:w-80 lg:h-80 flex-shrink-0"
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true, amount: 0.4 }}
+            transition={{ duration: 0.5 }}
+          >
             <img
               src={img}
               alt="A professional headshot of Shwetank Jain"
               className="rounded-full w-full h-full object-cover shadow-lg"
             />
-          </div>
+          </motion.div>
           <div className="text-lg text-center md:text-left text-gray-700 dark:text-gray-400 leading-relaxed space-y-6">
             <p>
               Hello! I'm Shwetank Jain, a B.Tech student at MNNIT Allahabad with
