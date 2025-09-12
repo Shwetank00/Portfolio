@@ -1,8 +1,8 @@
+// src/sections/Hero.jsx
 import config from "../config";
 import { GithubIcon, LinkedinIcon } from "../icons";
 
 export default function Hero() {
-  // Reusable button (now forwards extra props like `download`)
   const Button = ({ children, href, className, ...props }) => (
     <a
       href={href}
@@ -16,12 +16,13 @@ export default function Hero() {
     </a>
   );
 
-  // CV served from /public. Works locally and on Vercel.
-  const cvUrl = `${import.meta.env.BASE_URL}cv/Shwetank_Jain_CV.pdf`;
+  // PDF CV link
+  const cvUrl = `${import.meta.env.BASE_URL}Shwetank_Jain_CV.pdf`;
+  const mailHref = `mailto:${config.email}?subject=Hello%20Shwetank`;
 
   return (
     <section className="relative overflow-hidden pt-32 pb-24 text-center">
-      {/* Decorative background (kept, clipped to avoid horizontal scroll) */}
+      {/* Decorative background */}
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
         <div className="absolute top-24 right-0 translate-x-1/4 lg:translate-x-1/3 h-[28rem] w-[28rem] lg:h-[44rem] lg:w-[44rem] rounded-full bg-gradient-to-tr from-fuchsia-500/30 via-sky-500/30 to-emerald-500/30 blur-3xl" />
         <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(0,0,0,.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,0,0,.06)_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,rgba(255,255,255,.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,.06)_1px,transparent_1px)] bg-[size:24px_24px]" />
@@ -39,16 +40,17 @@ export default function Hero() {
 
           <div className="flex flex-wrap justify-center items-center gap-4">
             <Button href="#contact">Get In Touch</Button>
-            {/* New: Download CV */}
-            <Button href={cvUrl} download>
+            <Button href={cvUrl} download="Shwetank_Jain_CV.pdf">
               Download CV
             </Button>
 
+            {/* Social + Email icons */}
             <div className="flex space-x-4">
               <a
                 href={config.socials.github}
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="GitHub"
                 className="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors duration-300"
               >
                 <GithubIcon className="w-8 h-8" />
@@ -57,9 +59,32 @@ export default function Hero() {
                 href={config.socials.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="LinkedIn"
                 className="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors duration-300"
               >
                 <LinkedinIcon className="w-8 h-8" />
+              </a>
+              {/* New: Email icon opens composer */}
+              <a
+                href={mailHref}
+                aria-label="Email"
+                className="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors duration-300"
+              >
+                {/* inline Mail icon to avoid editing your icons file */}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-8 h-8"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M3 7l9 6 9-6M5 19h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2z"
+                  />
+                </svg>
               </a>
             </div>
           </div>
