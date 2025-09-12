@@ -1,15 +1,31 @@
-// src/components/Footer.jsx
 import config from "../config";
 import { GithubIcon, LinkedinIcon } from "../icons";
 
+// Helper to build a safe mailto link
+const createMailto = ({ to, subject, body } = {}) => {
+  const params = new URLSearchParams();
+  if (subject) params.set("subject", subject);
+  if (body) params.set("body", body);
+  const query = params.toString();
+  return `mailto:${to}${query ? `?${query}` : ""}`;
+};
+
 export default function Footer() {
-  const mailHref = `mailto:${config.email}?subject=Hello%20Shwetank`;
+  const mailHref = createMailto({
+    to: config.email,
+    subject: "Hello Shwetank",
+  });
+
+  const openMail = (e) => {
+    // Some environments ignore anchor default for mailto; force it.
+    e.preventDefault();
+    window.location.href = mailHref;
+  };
 
   return (
     <footer className="bg-black text-white py-8">
       <div className="container mx-auto px-6 text-center text-gray-400">
         <div className="flex justify-center space-x-6 mb-4">
-          {/* GitHub */}
           <a
             href={config.socials.github}
             target="_blank"
@@ -20,7 +36,6 @@ export default function Footer() {
             <GithubIcon className="w-6 h-6" />
           </a>
 
-          {/* LinkedIn */}
           <a
             href={config.socials.linkedin}
             target="_blank"
@@ -31,14 +46,14 @@ export default function Footer() {
             <LinkedinIcon className="w-6 h-6" />
           </a>
 
-          {/* Email (opens compose) */}
+          {/* Email icon — triggers the mail composer */}
           <a
             href={mailHref}
+            onClick={openMail}
             aria-label="Email"
             className="hover:text-white transition-colors duration-300"
             title={config.email}
           >
-            {/* Inline mail icon */}
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="w-6 h-6"
@@ -56,12 +71,12 @@ export default function Footer() {
           </a>
         </div>
 
-        {/* Clickable email text (optional but nice) */}
-        <div className="text-sm">
-          <a href={mailHref} className="underline hover:text-gray-200">
+        {/* Optional: click-to-copy / mail link text. Remove if you want ultra-minimal. */}
+        {/* <div className="text-sm">
+          <a href={mailHref} onClick={openMail} className="underline hover:text-gray-200">
             {config.email}
           </a>
-        </div>
+        </div> */}
 
         <p className="mt-2">
           &copy; {new Date().getFullYear()} {config.name}. All Rights Reserved.

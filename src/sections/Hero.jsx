@@ -15,10 +15,22 @@ export default function Hero() {
       </span>
     </a>
   );
+  const createMailto = ({ to, subject, body } = {}) => {
+    const params = new URLSearchParams();
+    if (subject) params.set("subject", subject);
+    if (body) params.set("body", body);
+    const q = params.toString();
+    return `mailto:${to}${q ? `?${q}` : ""}`;
+  };
 
-  // PDF CV link
-  const cvUrl = `${import.meta.env.BASE_URL}Shwetank_Jain_CV.pdf`;
-  const mailHref = `mailto:${config.email}?subject=Hello%20Shwetank`;
+  const mailHref = createMailto({
+    to: config.email,
+    subject: "Hello Shwetank",
+  });
+  const openMail = (e) => {
+    e.preventDefault();
+    window.location.href = mailHref;
+  };
 
   return (
     <section className="relative overflow-hidden pt-32 pb-24 text-center">
@@ -67,10 +79,10 @@ export default function Hero() {
               {/* New: Email icon opens composer */}
               <a
                 href={mailHref}
+                onClick={openMail}
                 aria-label="Email"
                 className="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors duration-300"
               >
-                {/* inline Mail icon to avoid editing your icons file */}
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="w-8 h-8"
