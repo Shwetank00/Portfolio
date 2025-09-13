@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
-import { Toaster } from "react-hot-toast";
 import Header from "./components/Header";
-import Footer from "./components/Footer";
-
+import BackgroundFX from "./components/BackgroundFX";
 import Hero from "./sections/Hero";
 import About from "./sections/About";
 import Projects from "./sections/Projects";
 import Skills from "./sections/Skills";
 import Contact from "./sections/Contact";
+import Footer from "./components/Footer";
 
 export default function App() {
   const [theme, setTheme] = useState("light");
@@ -15,20 +14,19 @@ export default function App() {
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme") || "light";
     setTheme(savedTheme);
-    if (savedTheme === "dark") document.documentElement.classList.add("dark");
+    document.documentElement.classList.toggle("dark", savedTheme === "dark");
   }, []);
 
   const toggleTheme = () => {
     const next = theme === "light" ? "dark" : "light";
     setTheme(next);
     localStorage.setItem("theme", next);
-    if (next === "dark") document.documentElement.classList.add("dark");
-    else document.documentElement.classList.remove("dark");
+    document.documentElement.classList.toggle("dark", next === "dark");
   };
 
   return (
-    <div className="overflow-x-hidden bg-white dark:bg-gray-950 font-sans antialiased text-gray-800 dark:text-gray-200">
-      <Toaster position="top-center" />
+    <div className="bg-white dark:bg-gray-950 font-sans antialiased text-gray-800 dark:text-gray-200 min-h-screen">
+      <BackgroundFX />
       <Header theme={theme} toggleTheme={toggleTheme} />
       <main>
         <Hero />

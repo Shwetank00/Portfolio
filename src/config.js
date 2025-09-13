@@ -7,10 +7,11 @@ const config = {
     codolio: "https://www.codolio.com/profile/shwetank00",
   },
   projects: [
+    // config.projects = [...]
     {
       title: "Welth: AI Finance Platform",
       description:
-        "An AI-powered platform to manage finances, featuring budget/transaction dashboards, OCR for receipts using the Gemini API, and automated reporting.",
+        "A finance platform designed for clarity and automation. Budgets and transactions stream into real-time dashboards, receipts are parsed via the Gemini OCR pipeline, and scheduled reports keep teams aligned. Background jobs reconcile accounts, catch anomalies, and notify users, while role-based access and audit trails keep data safe.",
       tags: [
         "Next.js",
         "Prisma",
@@ -28,8 +29,16 @@ const config = {
     {
       title: "Keeper: Notes Management App",
       description:
-        "A full-stack notes platform with optimized database performance and secure JWT authentication with Role-Based Access Control.",
-      tags: ["React", "Node.js", "MongoDB", "JWT", "GitHub Actions", "OpenAPI"],
+        "A notes platform focused on speed, reliability, and security. It features JWT authentication with refresh tokens, optimistic UI updates for near-instant interactions. CI/CD via GitHub Actions automates testing and deployments, while database indexes and query tuning keep reads/writes fast under load.",
+      tags: [
+        "React",
+        "Node.js",
+        "MongoDB",
+        "JWT",
+        "RBAC",
+        "GitHub Actions",
+        "OpenAPI",
+      ],
       link: "https://github.com/Shwetank00/keeper",
       liveLink: "https://keeper-shwetank.vercel.app/",
       bgImage:

@@ -1,91 +1,117 @@
+// src/sections/Projects.jsx
 import AnimatedSection from "../components/AnimatedSection";
 import config from "../config";
 import { GithubIcon, ExternalLinkIcon } from "../icons";
 import { motion } from "framer-motion";
+import TiltCard from "../components/TiltCard";
 
 const gridVariants = {
   hidden: {},
-  show: {
-    transition: { staggerChildren: 0.08, delayChildren: 0.1 },
-  },
+  show: { transition: { staggerChildren: 0.08, delayChildren: 0.05 } },
 };
-
 const cardVariants = {
-  hidden: { opacity: 0, y: 20 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+  hidden: { opacity: 0, y: 18 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.45 } },
 };
 
-function ProjectCard({ title, description, tags, link, liveLink, bgImage }) {
+function ProjectCard({
+  title,
+  description,
+  tags = [],
+  link,
+  liveLink,
+  bgImage,
+}) {
+  const href = liveLink || link || "#";
+
   return (
-    <motion.div
-      variants={cardVariants}
-      whileHover={{ y: -6, scale: 1.02 }}
-      transition={{ type: "spring", stiffness: 260, damping: 20 }}
-      className="relative group rounded-lg p-6 overflow-hidden bg-cover bg-center hover:shadow-2xl hover:shadow-slate-900/50 dark:hover:shadow-black/50 transition-all duration-300 flex flex-col text-white min-h-[350px]"
-      style={{
-        backgroundImage: `linear-gradient(rgba(15, 23, 42, 0.88), rgba(15, 23, 42, 0.88)), url(${bgImage})`,
-      }}
-    >
-      <div className="flex flex-col h-full">
-        <h3 className="text-xl font-bold text-slate-100 mb-2">{title}</h3>
-        <p className="text-slate-300 mb-4 flex-grow">{description}</p>
-        <div className="flex flex-wrap gap-2 mb-4">
-          {tags.map((tag) => (
-            <span
-              key={tag}
-              className="bg-slate-100/10 text-slate-300 px-3 py-1 rounded-full text-sm font-medium backdrop-blur-sm"
-            >
-              {tag}
-            </span>
-          ))}
-        </div>
-        <div className="flex items-center gap-6 mt-auto pt-4 border-t border-slate-200/20">
+    <motion.div variants={cardVariants}>
+      {/* Shell provides the bright halo + parent hover state */}
+      <div className="project-card-shell group">
+        <span className="project-halo" aria-hidden="true" />
+
+        <TiltCard halo max={8} hoverScale={1.01}>
+          {/* project-dark-hover class triggers dark-on-hover via CSS below */}
           <a
-            href={link}
+            href={href}
             target="_blank"
-            rel="noopener noreferrer"
-            className="relative z-10 text-slate-300 hover:text-white font-medium transition-colors duration-300 flex items-center gap-2"
+            rel="noreferrer"
+            className="project-card project-dark-hover gradient-border block card overflow-hidden
+                       focus:outline-none focus:ring-2 focus:ring-violet-400/60 dark:focus:ring-violet-500/50"
           >
-            <GithubIcon className="w-5 h-5" /> GitHub
+            {/* Cover (dimmed for readability) */}
+            <div className="relative h-44 w-full overflow-hidden">
+              <div
+                className="absolute inset-0 bg-cover bg-center cover-dim transition-transform duration-500 group-hover:scale-[1.02]"
+                style={{ backgroundImage: `url(${bgImage})` }}
+                aria-hidden="true"
+              />
+            </div>
+
+            {/* Content */}
+            <div className="p-6">
+              <h3 className="font-display text-lg font-extrabold text-neutral-900 dark:text-neutral-100">
+                <span className="text-gradient">{title}</span>
+              </h3>
+
+              <p className="mt-2 text-neutral-700 dark:text-neutral-300">
+                {description}
+              </p>
+
+              {tags.length > 0 && (
+                <div className="flex flex-wrap gap-2 mt-4">
+                  {tags.map((t) => (
+                    <span key={t} className="chip">
+                      {t}
+                    </span>
+                  ))}
+                </div>
+              )}
+
+              <div className="mt-5 pt-4 border-t border-neutral-200 dark:border-neutral-800 flex items-center gap-6">
+                {link && (
+                  <a
+                    href={link}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-2 text-neutral-700 dark:text-neutral-300 transition-colors"
+                  >
+                    <GithubIcon className="w-5 h-5" /> GitHub
+                  </a>
+                )}
+                {liveLink && (
+                  <a
+                    href={liveLink}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-2 text-neutral-700 dark:text-neutral-300 transition-colors"
+                  >
+                    <ExternalLinkIcon className="w-5 h-5" /> Live
+                  </a>
+                )}
+              </div>
+            </div>
           </a>
-          <a
-            href={liveLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="relative z-10 text-slate-300 hover:text-white font-medium transition-colors duration-300 flex items-center gap-2"
-          >
-            <ExternalLinkIcon className="w-5 h-5" /> Live Demo
-          </a>
-        </div>
+        </TiltCard>
       </div>
-      <a
-        href={liveLink}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="absolute inset-0 z-0"
-      >
-        <span className="sr-only">View live demo for {title}</span>
-      </a>
     </motion.div>
   );
 }
 
 export default function Projects() {
   return (
-    <AnimatedSection
-      id="projects"
-      className="py-20 bg-gray-50 dark:bg-black/50"
-    >
-      <div className="container mx-auto px-6">
-        <h2 className="text-4xl font-bold text-center text-gray-900 dark:text-gray-100 mb-12">
-          My Projects
+    <AnimatedSection id="projects" className="py-20">
+      <div className="container-pro px-6 lg:px-8">
+        <h2 className="font-display text-4xl font-extrabold text-neutral-900 dark:text-neutral-100 text-center mb-12">
+          Projects
         </h2>
+
         <motion.div
           variants={gridVariants}
           initial="hidden"
           whileInView="show"
-          viewport={{ once: true, amount: 0.3 }}
-          className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto"
+          viewport={{ once: true, amount: 0.2 }}
+          className="grid md:grid-cols-2 gap-8"
         >
           {config.projects.map((p) => (
             <ProjectCard key={p.title} {...p} />
